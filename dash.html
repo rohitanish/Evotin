@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting App Dashboard</title>
+    <link rel="stylesheet" href="dash.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>Welcome, <span id="user-name"></span>!</h1>
+            <p>Your Voting Dashboard</p>
+        </header>
+        <nav class="button-grid">
+            <button onclick="showSection('current-elections')">Current Elections</button>
+            <button onclick="showSection('upcoming-elections')">Upcoming Elections</button>
+            <button onclick="showSection('past-elections')">Past Elections</button>
+            <button onclick="showSection('notifications')">Notifications</button>
+            <button onclick="showSection('profile')">Profile</button>
+            <button onclick="showSection('support')">Support</button>
+        </nav>
+        <section id="current-elections" class="content-section">
+            <h2>Current Elections</h2>
+            <ul>
+                <!-- Election items will be dynamically added here -->
+            </ul>
+            
+        </section>
+        <section id="upcoming-elections" class="content-section hidden">
+            <h2>Upcoming Elections</h2>
+            <ul>
+                <!-- Upcoming election items will be dynamically added here -->
+            </ul>
+        </section>
+        <section id="past-elections" class="content-section hidden">
+            <h2>Past Elections</h2>
+            <ul>
+                <!-- Past election items will be dynamically added here -->
+            </ul>
+        </section>
+        <section id="notifications" class="content-section hidden">
+            <h2>Notifications</h2>
+            <ul>
+                <!-- Notifications will be dynamically added here -->
+            </ul>
+        </section>
+        <section id="profile" class="content-section hidden">
+            <h2>Profile Management</h2>
+            <button onclick="updateProfile()">Update Profile</button>
+        </section>
+        <section id="support" class="content-section hidden">
+            <h2>Help and Support</h2>
+            <p>For assistance, please contact rohitanish86@gmail.com</p>
+        </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.2/dist/web3.min.js"></script>
+    <script src="dash.js"></script>
+</body>
+</html>
