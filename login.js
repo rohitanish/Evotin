@@ -23,82 +23,86 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     signupForm.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const voterIdInput = signupForm.querySelector('input[placeholder="Voter Id"]');
-        const voterId = voterIdInput.value;
-        if (validateVoterID(voterId)) {
-            const formData = new FormData(signupForm);
-            const data = {
-                username: formData.get('username'),
-                email: formData.get('email'),
-                password: formData.get('password'),
-                voter_id: formData.get('voter_id'),
-                state: formData.get('state')
-            };
+      event.preventDefault();
+      const voterIdInput = signupForm.querySelector('input[placeholder="Voter Id"]');
+      const voterId = voterIdInput.value;
+      if (validateVoterID(voterId)) {
+          const formData = new FormData(signupForm);
+          const data = {
+              username: formData.get('username'),
+              email: formData.get('email'),
+              password: formData.get('password'),
+              voter_id: formData.get('voter_id'),
+              state: formData.get('state')
+          };
 
-            console.log('Sending signup data:', data);
+          console.log('Sending signup data:', data);
 
-            try {
-                const response = await fetch('http://localhost:3000/signup', { // Ensure the URL is correct
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+          try {
+              const response = await fetch('http://localhost:3000/signup', { // Ensure the URL is correct
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+              });
 
-                if (response.ok) {
-                    alert('Sign up successful!');
-                } else {
-                    alert('Failed to register user.');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while registering the user.');
-            }
-        } else {
-            alert('Invalid Voter ID. Please enter a valid Voter ID.');
-        }
-    });
-
-    loginForm.addEventListener('submit', async function(event) {
-  event.preventDefault();
-  const formData = new FormData(loginForm);
-  const data = {
-    email: formData.get('email'),
-    password: formData.get('password'),
-  };
-
-  console.log('Sending login data:', data);
-
-  try {
-    const response = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log('Login response:', result); // Log the response
-      if (result.success) {
-        alert('Login successful!');
-        sessionStorage.setItem('username', result.name); // Store the username
-        sessionStorage.setItem('state', result.state); // Store the state
-        window.location.href = "dash.html"; // Redirect to dashboard
+              if (response.ok) {
+                  alert('Sign up successful!');
+              } else {
+                  alert('Failed to register user.');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              alert('An error occurred while registering the user.');
+          }
       } else {
-        alert('Invalid email or password.');
+          alert('Invalid Voter ID. Please enter a valid Voter ID.');
       }
+  });
+
+  loginForm.addEventListener('submit', async function(event) {
+event.preventDefault();
+const formData = new FormData(loginForm);
+const data = {
+  email: formData.get('email'),
+  password: formData.get('password'),
+};
+
+console.log('Sending login data:', data);
+
+try {
+  const response = await fetch('http://localhost:3000/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (response.ok) {
+    const result = await response.json();
+    console.log('Login response:', result); // Log the response
+    if (result.success) {
+      alert('Login successful!');
+      sessionStorage.setItem('username', result.name); // Store the username
+      sessionStorage.setItem('state', result.state); // Store the state
+      sessionStorage.setItem('voter-id', result.voter_id);
+      window.location.href = "dash.html"; // Redirect to dashboard
     } else {
-      alert('Failed to authenticate user.');
+      alert('Invalid email or password.');
     }
-  } catch (error) {
-    console.error('Error:', error);
-    alert('An error occurred while logging in.');
+  } else {
+    alert('Failed to authenticate user.');
   }
+} catch (error) {
+  console.error('Error:', error);
+  alert('An error occurred while logging in.');
+}
 });
+
+    
+
 
     
     

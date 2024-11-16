@@ -9,6 +9,85 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    const currentElections = [
+        { title: 'BJP vs Congress', description: 'Vote for your preferred party', endDate: '2024-11-01' }
+    ];
+
+    const upcomingElections = [
+        { title: 'Election 3', description: 'Description for election 3', startDate: '2024-12-15' }
+    ];
+
+    const pastElections = [
+        { title: 'Election 4', description: 'Description for election 4', result: 'Result of election 4' }
+    ];
+
+    const notifications = [
+        { message: 'Don’t forget to vote in the current election!' },
+        { message: 'Upcoming election starts soon!' }
+    ];
+
+    const currentElectionsList = document.querySelector('#current-elections ul');
+    const upcomingElectionsList = document.querySelector('#upcoming-elections ul');
+    const pastElectionsList = document.querySelector('#past-elections ul');
+    const notificationsList = document.querySelector('#notifications ul');
+
+    currentElections.forEach(election => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="election-item">
+                <img src="bjp.png" alt="BJP Logo" class="party-logo">
+                <img src="congress.png" alt="Congress Logo" class="party-logo">
+                <div class="election-details">
+                    <h3>${election.title}</h3>
+                    <p>${election.description}</p>
+                    <button class="vote-button" onclick="vote('BJP')">Vote BJP</button>
+                    <button class="vote-button" onclick="vote('CONGRESS')">Vote Congress</button>
+                </div>
+            </div>
+        `;
+        currentElectionsList.appendChild(li);
+    });
+
+    upcomingElections.forEach(election => {
+        const li = document.createElement('li');
+        li.textContent = `${election.title}: ${election.description} (Starts on: ${election.startDate})`;
+        upcomingElectionsList.appendChild(li);
+    });
+
+    pastElections.forEach(election => {
+        const li = document.createElement('li');
+        li.textContent = `${election.title}: ${election.description} (Result: ${election.result})`;
+        pastElectionsList.appendChild(li);
+    });
+
+    notifications.forEach(notification => {
+        const li = document.createElement('li');
+        li.textContent = notification.message;
+        notificationsList.appendChild(li);
+    });
+
+    const userName = sessionStorage.getItem('username');
+    console.log(userName);
+    document.getElementById('user-name').innerHTML = userName;
+    const state = sessionStorage.getItem('state');
+    console.log(state);
+});
+
+async function vote(party) {
+    const voterId = sessionStorage.getItem('voter-id');
+    console.log('Retrieved Voter ID:', voterId); // Log the retrieved voter ID
+
+    if (!voterId) {
+        alert('User information is missing. Please log in again.');
+        return;
+    }
+
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+
+    console.log(`Voting for ${party} by voter ID ${voterId}`);
+
+    // Initialize the Voting contract
     const contractABI = [
         {
             "inputs": [
@@ -80,97 +159,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     ];
 
-    const contractAddress = '0x062E8679f76F871FF1df35CF2ea68B3Bf737C044'; // Update this with your deployed contract address
-    const votingContract = new web3.eth.Contract(contractABI, contractAddress);
+    const contractAddress = '0x6885dAd4Aef4764B7E19504e064fd318125E2a75'; // Update this with your deployed contract address
+    const Voting = new web3.eth.Contract(contractABI, contractAddress);
 
-    const currentElections = [
-        { title: 'BJP vs Congress', description: 'Vote for your preferred party', endDate: '2024-11-01' }
-    ];
-
-    const upcomingElections = [
-        { title: 'Election 3', description: 'Description for election 3', startDate: '2024-12-15' }
-    ];
-
-    const pastElections = [
-        { title: 'Election 4', description: 'Description for election 4', result: 'Result of election 4' }
-    ];
-
-    const notifications = [
-        { message: 'Don’t forget to vote in the current election!' },
-        { message: 'Upcoming election starts soon!' }
-    ];
-
-    const currentElectionsList = document.querySelector('#current-elections ul');
-    const upcomingElectionsList = document.querySelector('#upcoming-elections ul');
-    const pastElectionsList = document.querySelector('#past-elections ul');
-    const notificationsList = document.querySelector('#notifications ul');
-
-    currentElections.forEach(election => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <div class="election-item">
-                <img src="bjp.png" alt="BJP Logo" class="party-logo">
-                <img src="congress.png" alt="Congress Logo" class="party-logo">
-                <div class="election-details">
-                    <h3>${election.title}</h3>
-                    <p>${election.description}</p>
-                    <button class="vote-button" onclick="vote('BJP')">Vote BJP</button>
-                    <button class="vote-button" onclick="vote('CONGRESS')">Vote Congress</button>
-                </div>
-            </div>
-        `;
-        currentElectionsList.appendChild(li);
-    });
-
-    upcomingElections.forEach(election => {
-        const li = document.createElement('li');
-        li.textContent = `${election.title}: ${election.description} (Starts on: ${election.startDate})`;
-        upcomingElectionsList.appendChild(li);
-    });
-
-    pastElections.forEach(election => {
-        const li = document.createElement('li');
-        li.textContent = `${election.title}: ${election.description} (Result: ${election.result})`;
-        pastElectionsList.appendChild(li);
-    });
-
-    notifications.forEach(notification => {
-        const li = document.createElement('li');
-        li.textContent = notification.message;
-        notificationsList.appendChild(li);
-    });
-
-    // const userName = sessionStorage.getItem('username');
-    // const userPassword = sessionStorage.getItem('password');
-
-    // if (userName && userPassword) {
-    //     document.getElementById('user-name').textContent = userName;
-    //     console.log(`Username: ${userName}, Password: ${userPassword}`);
-    // } else {
-    //     console.error('Username or password not found in session storage');
-    //     // window.location.href = 'login.html'; // Redirect to login if no username found
-    // }
-});
-
-async function vote(party) {
-    const voterId = sessionStorage.getItem('voter_id'); // Assuming you store the voter ID in session storage
-
-    if (!voterId) {
-        alert('User information is missing. Please log in again.');
-        return;
-    }
-
-    const accounts = await web3.eth.getAccounts();
-    const account = accounts[0];
-
-    console.log(`Voting for ${party} by voter ID ${voterId}`);
-
-    votingContract.methods.vote(voterId, party).send({ from: account })
-        .then(() => {
-            alert(`You voted for ${party}!`);
-        })
-        .catch((error) => {
+    try {
+        await Voting.methods.vote(voterId, party).send({ from: account, gas: 3000000 });
+        alert(`You voted for ${party}!`);
+    } catch (error) {
+        if (error.message.includes("Voter has already voted")) {
+            alert('You have already voted.');
+        } else {
             console.error('Error submitting vote:', error);
             alert('There was an error submitting your vote. Please try again.');
-        });
+        }
+    }
 }
+

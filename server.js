@@ -2,12 +2,21 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Configure session middleware
+app.use(session({
+  secret: 'your_secret_key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 // Database connection
 const db = mysql.createConnection({
@@ -66,9 +75,11 @@ app.post('/login', async (req, res) => {
         const passwordMatch = await bcrypt.compare(password, user.password_hash);
 
         if (passwordMatch) {
-         
-          console.log('User data:', { name: user.username, state: user.state }); 
-          res.json({ success: true, name: user.username, state: user.state });
+          req.session.username = user.username;
+          req.session.state = user.state;
+          req.session.voter_id = user.voter_id;
+          console.log('User data:', { name: user.username, state: user.state,voter_id: user.voter_id });
+          res.json({ success: true, name: user.username, state: user.state, voter_id: user.voter_id });
         } else {
           res.json({ success: false, message: 'Invalid email or password.' });
         }
@@ -82,39 +93,6 @@ app.post('/login', async (req, res) => {
   }
 });
 
-
 app.listen(3000, () => {
   console.log('Server running on port 3000');
 });
-
-//dash end
-// app.post('/dashboard', async (req, res) => {
-//   const { email, password } = req.body;
-
-//   try {
-//     const sql = 'SELECT * FROM users WHERE email = ?';
-//     db.query(sql, [email], async (err, results) => {
-//       if (err) {
-//         console.error('Error fetching user:', err);
-//         res.status(500).send('Server Error');
-//       } else if (results.length > 0) {
-//         const user = results[0];
-//         const passwordMatch = await bcrypt.compare(password, user.password_hash);
-
-//         if (passwordMatch) {
-//           // Successful then next to return 
-//           console.log('User data:', { name: user.username, state: user.state }); // Log user data
-//           res.json({ success: true, name: user.username, state: user.state });
-//         } else {
-//           res.json({ success: false, message: 'Invalid email or password.' });
-//         }
-//       } else {
-//         res.json({ success: false, message: 'Invalid email or password.' });
-//       }
-//     });
-//   } catch (error) {
-//     console.error('Unexpected error:', error);
-//     res.status(500).send('Server Error');
-//   }
-// });
-
