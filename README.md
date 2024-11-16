@@ -1,4 +1,4 @@
-# My Web Application
+# Evotin Blockchain based Voting Software
 
 This project is a web application that uses various Node.js packages and integrates with a MySQL database and a Ganache blockchain for implementing blockchain functionalities.
 
@@ -14,7 +14,7 @@ This project is a web application that uses various Node.js packages and integra
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/your-repo.git
+    git clone https://github.com/roiitanish86/evotin
     cd your-repo
     ```
 
