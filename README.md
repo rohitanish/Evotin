@@ -1,6 +1,7 @@
 # Evotin Blockchain based Voting Software
 
 This project is a web application that uses various Node.js packages and integrates with a MySQL database and a Ganache blockchain for implementing blockchain functionalities.
+Make sure to use sqlyog database, ganache and nodejs
 
 ## Table of Contents
 
