@@ -91,87 +91,89 @@ async function vote(party) {
     const contractABI = [
         {
             "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "name": "voters",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "voterid",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "party",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function",
-            "constant": true
-        },
         {
-            "inputs": [
-                {
-                    "internalType": "string",
-                    "name": "_voterid",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "_party",
-                    "type": "string"
-                }
-            ],
-            "name": "vote",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "_voter",
-                    "type": "address"
-                }
-            ],
-            "name": "getVoter",
-            "outputs": [
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                },
-                {
-                    "internalType": "string",
-                    "name": "",
-                    "type": "string"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function",
-            "constant": true
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
-    ];
+      ],
+      "name": "voters",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "voterid",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "party",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_voterid",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "_party",
+          "type": "string"
+        }
+      ],
+      "name": "vote",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_voter",
+          "type": "address"
+        }
+      ],
+      "name": "getVoter",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function",
+      "constant": true
+    }
+  ];
 
-    const contractAddress = '0x6885dAd4Aef4764B7E19504e064fd318125E2a75'; // Update this with your deployed contract address
+    const contractAddress = '0xE5311d0cfA45e2ECb3B23d288A1adD6d25CAE726'; 
     const Voting = new web3.eth.Contract(contractABI, contractAddress);
 
     try {
+        const voter = await Voting.methods.getVoter(account).call();
+        if (voter[0]) {
+            alert('You have already voted.');
+            return;
+        }
+
         await Voting.methods.vote(voterId, party).send({ from: account, gas: 3000000 });
         alert(`You voted for ${party}!`);
+        console.log("vote transferred")
     } catch (error) {
-        if (error.message.includes("Voter has already voted")) {
-            alert('You have already voted.');
-        } else {
-            console.error('Error submitting vote:', error);
-            alert('There was an error submitting your vote. Please try again.');
-        }
+        console.error('Error submitting vote:', error);
+        alert('There was an error submitting your vote. Please try again.');
     }
 }
-

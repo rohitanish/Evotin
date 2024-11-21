@@ -18,3 +18,4 @@ contract Voting {
         return (voters[_voter].voterid, voters[_voter].party);
     }
 }
+
