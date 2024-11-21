@@ -35,6 +35,16 @@ Make sure to use sqlyog database, ganache and nodejs
     npm start
     ```
 
+6. Compile the smart contract and change the contract address:
+    ```bash
+    Go to my-truffle-project directory and in terminal enter truffle compile and truffle migrate.
+    This will create a new contract address for security purpose. Ensure to change the contract address in dash.js
+    ```
+7. You are ready to vote:
+    ```bash
+    Start voting  (Prototype version)
+    ```
+
 ## Usage
 
 - The application provides a web interface for users to interact with the blockchain and the MySQL database.
